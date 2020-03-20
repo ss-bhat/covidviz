@@ -1,0 +1,38 @@
+syntax: glob
+# generic
+*.pyc
+*.swp
+*.swo
+.DS_Store
+covid19viz.egg-info/*
+sandbox/*
+dist
+
+# other
+pip-requirements-local.txt
+migrate/*
+build/*
+tmp/*
+solr_runtime/*
+fl_notes.txt
+!ckan/migration/alembic.ini
+.noseids
+*~
+.idea
+.vscode
+
+# nosetest coverage output
+.coverage
+htmlcov/*
+
+# node.js
+node_modules/
+
+# docker
+contrib/docker/.env
+
+__pycache__
+
+# Env
+covidviz_env/
+
