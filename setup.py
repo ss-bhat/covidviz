@@ -23,7 +23,7 @@ setup(
     author_email='',
     license="MIT",
     classifiers=[  # Optional
-	"License :: OSI Approved :: MIT License",
+        "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.6",
     ],

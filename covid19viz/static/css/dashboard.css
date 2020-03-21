@@ -1,0 +1,73 @@
+
+body {
+  background-color: #15658e!important;
+  color: #ffff!important;
+}
+
+header{
+    background-color: #094770;
+    justify-content: left!important;
+}
+
+.logo{
+    max-width: 50px;
+}
+
+.flex-container {
+  display: flex;
+  padding: 10px;
+  flex-direction: row;
+}
+
+.flex-container > div{
+  width: 100%;
+  margin: 10px;
+  text-align: center;
+  line-height: 75px;
+}
+
+.container{
+    margin-top: 2%;
+    margin-bottom: 2%;
+    background-color: #0a4871;
+    border-radius: 10px;
+}
+
+@media (min-width: 992px){
+.container {
+    max-width: 96%!important;
+}
+}
+
+@media (min-width: 768px){
+.container {
+    max-width: 96%!important;
+}
+}
+
+@media (min-width: 576px){
+.container {
+    max-width: 96%!important;
+}
+}
+
+.stats-card{
+    background-color: #18607e;
+    border-radius: 10px
+}
+
+.card1{
+    color: #ffcc00;
+}
+
+.card2{
+    color: chartreuse;
+}
+
+.card3{
+    color: #e89a80;
+}
+
+.dopdown-div{
+    max-height: 30px;
+}
