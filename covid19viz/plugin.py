@@ -23,8 +23,8 @@ class CovIdDashBoard:
         """
         dash_components = OrderedDict([
             ("stats", components.component_stats),
-            ("map", components.component_map),
             ("graph", components.component_graph),
+            ("map", components.component_map),
             ("trending", components.component_trending),
             ("history", components.component_history)
             #("change", components.component_change)
@@ -39,13 +39,10 @@ class CovIdDashBoard:
         """
         routes = (
             {
-                "url": "/static/<stylesheet>",
-                "view_func": route.serve_stylesheet
+                'url': "/all_country_location/",
+                "view_func": route.get_locations_for_all_country
             },
-            {
-                "url": "/static/img/<img>",
-                "view_func": route.server_image
-            },
+
         )
 
         return routes

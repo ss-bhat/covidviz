@@ -4,7 +4,7 @@ import dash_html_components as html
 header = html.Header(
     children=[
         html.Img(
-            src="/static/img/virus2.png",
+            src="/assets/img/virus2.png",
             className="logo"
         ),
         html.H3(

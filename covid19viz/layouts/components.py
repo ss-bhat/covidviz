@@ -1,6 +1,6 @@
 import dash_html_components as html
 import dash_core_components as dcc
-from covid19viz.model import stats
+from covid19viz.model import stats, map
 
 _stats = stats.get_statistics()
 
@@ -9,11 +9,11 @@ component_stats = html.Div(
         html.Div(
             children=[
                 html.Img(
-                    src="/static/img/virus2.png",
+                    src="/assets/img/virus2.png",
                     className="logo"
                 ),
 
-                "CONFIRMED",
+                "TOTAL CONFIRMED",
                 dcc.Markdown(
                     children="""
                     #### {}
@@ -25,10 +25,10 @@ component_stats = html.Div(
         html.Div(
             children=[
                 html.Img(
-                    src="/static/img/virus2.png",
+                    src="/assets/img/virus2.png",
                     className="logo"
                 ),
-                "RECOVERED",
+                "TOTAL RECOVERED",
                 dcc.Markdown(
                     children="""
                     #### {}
@@ -40,10 +40,10 @@ component_stats = html.Div(
         html.Div(
             children=[
                 html.Img(
-                    src="/static/img/virus2.png",
+                    src="/assets/img/virus2.png",
                     className="logo"
                 ),
-                "DEATHS",
+                "TOTAL DEATHS",
                 dcc.Markdown(
                     children="""
                     #### {}
@@ -59,18 +59,24 @@ component_stats = html.Div(
 
 component_map = html.Div(
     children=[
-            html.Div(
-                children=[
-                    html.H4(
-                        children="Map"
-                    )
-                ],
-                className="stats-card"
-        )
+        html.Div(
+            children=[
+                html.Div(
+                    children=[
 
+                    ],
+                    id="map",
+                    style={"height": "100%"},
+                    className="graph"
+                )
+
+            ],
+            className="stats-card"
+        )
     ],
-    id="map",
-    className="flex-container"
+    id="map-flex",
+    className="flex-container",
+    style={"min-height": "500px"}
 )
 
 
@@ -78,16 +84,20 @@ component_graph = html.Div(
     children=[
         html.Div(
             children=[
-                html.H4(
-                    children="stats 1"
-                )
+                    dcc.Graph(
+                        id="stats-by-country",
+                        figure=stats.get_stats_by_country(),
+                        className="graph"
+                    )
             ],
-            className="stats-card"
+            className="stats-card",
         ),
         html.Div(
             children=[
-                html.H4(
-                    children="stats 2"
+                dcc.Graph(
+                    id="current-cases-country",
+                    figure=stats.get_current_stats_for_country(),
+                    className="graph"
                 )
             ],
             className="stats-card"
@@ -103,7 +113,8 @@ component_trending = html.Div(
             children=[
                 dcc.Graph(
                     id="highest-cases-country",
-                    figure=stats.top_10_countries_confirmed_cases()
+                    figure=stats.top_10_countries_confirmed_cases(),
+                    className="graph"
                 )
             ],
             className="stats-card"
@@ -118,9 +129,19 @@ component_history = html.Div(
     children=[
         html.Div(
             children=[
-                dcc.Graph(
-                    id="history-cases-country",
-                    figure=stats.top_10_countries_confirmed_cases_by_time()
+                dcc.RadioItems(
+                        options=[
+                            {'label': '  Confirmed', 'value': 'confirmed'},
+                            {'label': '  Recovered', 'value': 'recovered'},
+                            {'label': '  Deaths', 'value': 'deaths'}
+                        ],
+                        value='confirmed',
+                        className="radio-buttons",
+                        labelClassName="radio-button-label",
+                        id="history-country-action-input"
+                    ),
+                html.Div(
+                    id="history-country-action"
                 )
             ],
             className="stats-card"

@@ -71,3 +71,30 @@ header{
 .dopdown-div{
     max-height: 30px;
 }
+
+.flex-container .stats-country{
+  display: flex;
+  padding: 10px;
+  flex-direction: column;
+}
+
+.radio-button-label{
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.radio-button-label:nth-child(1){
+    color: #ffcc00;
+}
+
+.radio-button-label:nth-child(2){
+    color: chartreuse;
+}
+
+.radio-button-label:nth-child(3){
+    color: #e89a80;
+}
+
+.graph{
+    border-radius: 10px;
+}
