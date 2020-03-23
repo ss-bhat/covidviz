@@ -63,7 +63,7 @@ component_map = html.Div(
             children=[
                 html.Div(
                     children=[
-
+                        map.get_map()
                     ],
                     id="map",
                     style={"height": "100%"},
@@ -76,7 +76,7 @@ component_map = html.Div(
     ],
     id="map-flex",
     className="flex-container",
-    style={"min-height": "500px"}
+    style={"minHeight": "500px"}
 )
 
 
@@ -84,27 +84,32 @@ component_graph = html.Div(
     children=[
         html.Div(
             children=[
-                    dcc.Graph(
-                        id="stats-by-country",
-                        figure=stats.get_stats_by_country(),
-                        className="graph"
-                    )
-            ],
-            className="stats-card",
-        ),
-        html.Div(
-            children=[
-                dcc.Graph(
-                    id="current-cases-country",
-                    figure=stats.get_current_stats_for_country(),
-                    className="graph"
+                html.Div(
+                    children=[
+                            dcc.Graph(
+                                id="stats-by-country",
+                                figure=stats.get_stats_by_country(),
+                                className="graph"
+                            )
+                    ],
+                    className="stats-card",
+                ),
+                html.Div(
+                    children=[
+                        dcc.Graph(
+                            id="current-cases-country",
+                            figure=stats.get_current_stats_for_country(),
+                            className="graph"
+                        )
+                    ],
+                    className="stats-card"
                 )
             ],
-            className="stats-card"
+            id="update-graph",
+            className="flex-container"
         )
     ],
-    id="graphs",
-    className="flex-container"
+    id="graphs"
 )
 
 component_trending = html.Div(

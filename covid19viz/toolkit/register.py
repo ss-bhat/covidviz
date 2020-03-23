@@ -91,3 +91,41 @@ class RegisterDashApplication(CovIdDashBoard):
                 figure=stats.top_10_countries_cases_by_time(action),
                 className="graph"
             )
+
+        @self._app.callback(
+            Output(component_id='graphs', component_property='children'),
+            [Input('map-flex', "n_clicks")]
+        )
+        def update_graph(data):
+            ctx = dash.callback_context
+            print("************")
+            print(ctx)
+            for evt in ctx.triggered:
+                print(evt)
+            element = html.Div(
+                children=[
+                    html.Div(
+                        children=[
+                                dcc.Graph(
+                                    id="stats-by-country",
+                                    figure=stats.get_stats_by_country(country="india"),
+                                    className="graph"
+                                )
+                        ],
+                        className="stats-card",
+                    ),
+                    html.Div(
+                        children=[
+                            dcc.Graph(
+                                id="current-cases-country",
+                                figure=stats.get_current_stats_for_country(country='india'),
+                                className="graph"
+                            )
+                        ],
+                        className="stats-card"
+                    )
+                ],
+                id="update-graph",
+                className="flex-container"
+            )
+            return element

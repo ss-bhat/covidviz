@@ -66,22 +66,22 @@ def get_map1():
 
 def get_map():
     _static_dir = h.get_static_dir_path()
-    _geojson_file = "{}/clean_countries.geojson".format(_static_dir)
+    _geojson_file = "{}/data/clean_countries.geojson".format(_static_dir)
     _token = "pk.eyJ1Ijoic3dhcm9vcGJoYXQxMjMiLCJhIjoiY2s4MmZleHZiMDUyMzNlcWtudWJxNHQ4byJ9.q_M3yDIf3UCUXD8jk8nelw"
     with open(_geojson_file, 'r') as f:
         geojson = json.load(f)
         f.close()
 
-    _location = [x['properties']['id'] for x in geojson['features']]
-
     layer = dict(
         type="fill",
-        below="traces",
+        below='traces',
         color="#18607e",
         opacity=0.7,
+        hovermode="closest",
+        interactive=True,
+        text=[x['properties']['id'] for x in geojson['features']],
         source=geojson,
-        sourcetype="geojson",
-        hovertemplate='<extra>%{properties.id}</extra>',
+        sourcetype="geojson"
 
     )
 
@@ -94,6 +94,7 @@ def get_map():
                     layout=dict(
                             plot_bgcolor="#18607e",
                             paper_bgcolor="#18607e",
+                            clickmode="event+select",
                             mapbox=dict(
                                 layers=[layer],
                                 accesstoken=_token,
@@ -133,6 +134,7 @@ def get_polygons_geojson():
     required_geojson = {"type": "FeatureCollection", "features":[]}
     features = required_geojson['features']
     found_countries = []
+    _id = 1
     with open(_countries_geojson_file, 'r') as f:
         geojson = json.load(f)['features']
         for item in geojson:
@@ -141,6 +143,8 @@ def get_polygons_geojson():
             if _ctr in _countries:
                 item['properties']['ADMIN'] = _ctr
                 item['properties']['id'] = _ctr
+                item['id'] = _id
+                _id += 1
                 features.append(item)
                 found_countries.append(_ctr)
         f.close()
@@ -153,3 +157,4 @@ def get_polygons_geojson():
     with open("{}/data/clean_countries.geojson".format(_static_dir), 'w') as f:
         json.dump(required_geojson, f)
         f.close()
+
