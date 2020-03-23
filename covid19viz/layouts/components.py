@@ -63,7 +63,7 @@ component_map = html.Div(
             children=[
                 html.Div(
                     children=[
-                        map.get_map()
+                        #map.get_map()
                     ],
                     id="map",
                     style={"height": "100%"},
@@ -76,7 +76,7 @@ component_map = html.Div(
     ],
     id="map-flex",
     className="flex-container",
-    style={"minHeight": "500px"}
+    style={"minHeight": "700px"}
 )
 
 

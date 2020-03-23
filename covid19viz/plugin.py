@@ -1,4 +1,4 @@
-from covid19viz import route
+from covid19viz.logic import api
 from collections import OrderedDict
 from covid19viz.layouts import components, header
 
@@ -6,7 +6,7 @@ from covid19viz.layouts import components, header
 class CovIdDashBoard:
 
     def __init__(self):
-        pass
+        self._api_url = "/api/action/"
 
     def header(self):
         """
@@ -16,7 +16,7 @@ class CovIdDashBoard:
 
         return header.header
 
-    def components(self):
+    def dash_components(self):
         """
         Register the required components orderd dict
         :return: dict
@@ -27,22 +27,70 @@ class CovIdDashBoard:
             ("map", components.component_map),
             ("trending", components.component_trending),
             ("history", components.component_history)
-            #("change", components.component_change)
         ])
 
         return dash_components
 
-    def routes(self):
+    def api_action(self):
         """
-        To register routes to the python dash
+        To register all API's
         :return: dict
         """
-        routes = (
+        actions = (
             {
-                'url': "/all_country_location/",
-                "view_func": route.get_locations_for_all_country
-            },
+                "action": "get_stats",
+                "type": "GET",
+                "module": api.get_stats
 
+            },
+            {
+                "action": "get_all_records_by_country",
+                "type": "GET",
+                "module": ""
+
+            },
+            {
+                "action": "get_all_records_by_provinces",
+                "type": "GET",
+                "module": ""
+
+            },
+            {
+                "action": "filter_by_country",
+                "type": "GET",
+                "module": ""
+
+            },
+            {
+                "action": "filter_by_province",
+                "type": "GET",
+                "module": ""
+
+            },
+            {
+                "action": "show_available_countries",
+                "type": "GET",
+                "module": ""
+
+            },
+            {
+                "action": "show_available_regions",
+                "type": "GET",
+                "module": ""
+
+            },
+            {
+                "action": "get_history_by_country",
+                "type": "GET",
+                "module": ""
+
+            },
+            {
+                "action": "get_history_by_province",
+                "type": "GET",
+                "module": ""
+
+            }
         )
 
-        return routes
+        return actions

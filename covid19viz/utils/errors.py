@@ -5,3 +5,7 @@ class BaseDashException(Exception):
 
 class NotFound(BaseDashException):
     pass
+
+
+class APIParameterError(BaseDashException):
+    pass
