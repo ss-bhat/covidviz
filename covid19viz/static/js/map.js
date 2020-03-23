@@ -18,6 +18,7 @@ $(document).ready(function(event){
                 });
 
                 var hoveredStateId = null;
+                var previousClickedStateId = null;
 
                 map.on('load', function() {
 
@@ -33,7 +34,12 @@ $(document).ready(function(event){
                         'layout': {},
                         'paint': {
                             // Polygon color
-                            'fill-color': '#18607e',
+                            'fill-color': [
+                                'case',
+                                ['boolean', ['feature-state', 'clicked'], false],
+                                '#ffcc00',
+                                '#18607e'
+                            ],
                             'fill-opacity': [
                                 'case',
                                 ['boolean', ['feature-state', 'hover'], false],
@@ -94,10 +100,20 @@ $(document).ready(function(event){
                           var country = feature['properties']['ADMIN']
                           if (feature['source'] == "countries"){
                               // Click Event
-                              var ele = $("#invisible-input");
-                              console.log(ele.handleChange)
-                              //console.log($("#invisible-input"))
-                              $("#submit-button").click()
+
+                              if (previousClickedStateId){
+                                map.setFeatureState(
+                                    { source: 'countries', id: previousClickedStateId },
+                                    { clicked: false }
+                                );
+                              }
+
+                              previousClickedStateId = feature.id;
+                              map.setFeatureState(
+                                { source: 'countries', id: previousClickedStateId },
+                                { clicked: true }
+                            );
+
                           }
 
                         });
