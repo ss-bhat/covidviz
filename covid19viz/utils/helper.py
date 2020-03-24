@@ -64,11 +64,12 @@ def get_all_records_by_country():
 
 def sort_data(data, action):
     """
-    Extract top 10 data
+    Extract top n data
     :param action: str
     :param data: list
     :return: list
     """
+    # TODO: Take this from config
     extract_top = 10
     return sorted(data, key=lambda k: k[action], reverse=True)[:extract_top]
 
@@ -92,6 +93,7 @@ def get_plot_layout(title=None, x_title=None, y_title=None):
     :param y_title: str
     :return: dict
     """
+    # TODO: Take this from config. Plot background color and text font color
     return dict(
         title=title,
         plot_bgcolor="#18607e",

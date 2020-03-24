@@ -10,7 +10,7 @@ log = logging.getLogger(__name__)
 
 def get_statistics():
     """
-    Current covid id stats.
+    Current covid-19 stats.
     :return: dict
     """
     stats = covid_data.get_stats()
@@ -18,20 +18,30 @@ def get_statistics():
     return stats
 
 
-def top_10_countries_confirmed_cases():
+def top_n_countries_confirmed_cases():
+    """
+    Get top n countries confirmed cases. Current data of confirmed, recovered and deaths
+    :return: dict
+    """
 
+    # Set color code
+    # TODO: Take this from config
     actions = OrderedDict([
         ("confirmed", "rgb(255, 204, 0, 1)"),
         ("recovered", "rgb(127, 255, 0, 1)"),
         ("deaths", "rgb(220, 53, 69, 1)"),
         ("label", "")
     ])
-    extract_top = 10
+
     _data = h.get_all_records_by_country()
-    sorted_data = sorted(_data, key=lambda k: k['confirmed'], reverse=True)[:extract_top]
+
+    # Sort data on top confirmed cases
+    sorted_data = h.sort_data(_data, "confirmed")
 
     figure = dict()
     stats = dict()
+
+    # Prepare the sorted data
     for x in sorted_data:
         for _a in actions:
             if _a in stats:
@@ -41,6 +51,7 @@ def top_10_countries_confirmed_cases():
 
     figure['data'] = []
 
+    # Create bubble chart and calculate bubble size
     for action in list(actions.keys())[:-1]:
         sizeref = 10. * max(stats[action]) / (100 ** 2)
         figure['data'].append(
@@ -60,8 +71,9 @@ def top_10_countries_confirmed_cases():
             )
         )
 
+    # Layout
     figure['layout'] = h.get_plot_layout(
-        title='Top 10 Countries Effected',
+        title='Top Countries Effected',
         x_title="Country",
         y_title="Count"
     )
@@ -69,11 +81,12 @@ def top_10_countries_confirmed_cases():
     return figure
 
 
-def top_10_countries_cases_by_time(action):
+def top_n_countries_cases_by_time(action):
+    """
+    Get top n countries historical data till now
+    :return: dict
     """
 
-    :return:
-    """
     data = h.get_all_records_by_country()
     sorted_data = h.sort_data(data, action)
     countries = [x.get('label') for x in sorted_data]
@@ -81,6 +94,7 @@ def top_10_countries_cases_by_time(action):
     figure = dict()
     figure['data'] = []
 
+    # Get historical data for each country and prepare
     for ctry in countries:
         _history = h.get_history_by_country(ctry)
         x = []
@@ -100,8 +114,9 @@ def top_10_countries_cases_by_time(action):
                 )
             )
 
+    # Layout
     figure['layout'] = h.get_plot_layout(
-        title='Top 10 Countries History - {}'.format(action.title()),
+        title='Historical Data for - {}'.format(action.title()),
         x_title="Date",
         y_title="Count"
     )
@@ -110,8 +125,14 @@ def top_10_countries_cases_by_time(action):
 
 
 @lru_cache(maxsize=3)
-def top_10_percentage_change(action):
-
+def top_n_percentage_change(action):
+    """
+    Top n countries percentage change data.
+    TODO: Currently this is not implemented takes time to load
+    :param action: str
+    :return: dict
+    """
+    # TODO: Take this from config
     _actions = OrderedDict([
         ("confirmed", "rgb(255, 204, 0, 0.8)"),
         ("recovered", "rgb(127, 255, 0, 0.8)"),
@@ -170,12 +191,13 @@ def top_10_percentage_change(action):
     return figure
 
 
-def get_stats_by_country(country="china"):
+def get_stats_by_country(country="ireland"):
     """
-    Get country data
-    :param country:
-    :return:
+    Get historical statistics for the given country data
+    :param country: str (default ireland)
+    :return: dict
     """
+    # TODO: Take this from config
     _actions = OrderedDict([
         ("confirmed", "rgb(255, 204, 0, 0.8)"),
         ("recovered", "rgb(127, 255, 0, 0.8)"),
@@ -183,7 +205,7 @@ def get_stats_by_country(country="china"):
     ])
     data = list(covid_data.get_history_by_country(country).values())[0]
     country_label = data['label']
-    title = "History Confirmed, Recoved and Deaths for {}".format(country_label)
+    title = "Historical Data for - {}".format(country_label)
     figure = dict()
     figure['data'] = []
 
@@ -221,13 +243,13 @@ def get_stats_by_country(country="china"):
     return figure
 
 
-def get_current_stats_for_country(country="china"):
+def get_current_stats_for_country(country="ireland"):
     """
-
+    Gets current statistics for the country
     :param country: str
-    :return:
+    :return: dict
     """
-
+    # TODO: Take this from config
     _actions = OrderedDict([
         ("confirmed", "rgb(255, 204, 0, 0.8)"),
         ("recovered", "rgb(127, 255, 0, 0.8)"),

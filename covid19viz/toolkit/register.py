@@ -1,19 +1,18 @@
 import dash
-import dash_html_components as html
-import dash_core_components as dcc
-from dash.dependencies import Input, Output
-from covid19viz.plugin import CovIdDashBoard
-from covid19viz.model import stats
+from covid19viz.plugin import CovIdDashBoardAPIPlugin
 from covid19viz.utils import helper as h
+from covid19viz.toolkit import APIGetActions, APIPostActions
+from covid19viz.utils import errors
+from covid19viz.controller.controller import APIResponseObject
 import logging
 
 log = logging.getLogger(__name__)
 
 
-class RegisterDashApplication(CovIdDashBoard):
+class RegisterDashApplication(CovIdDashBoardAPIPlugin):
 
     def __init__(self):
-        CovIdDashBoard.__init__(self)
+        CovIdDashBoardAPIPlugin.__init__(self)
         self._app = dash.Dash(
             __name__,
             assets_folder=h.get_static_dir_path()
@@ -24,70 +23,64 @@ class RegisterDashApplication(CovIdDashBoard):
         self.prepare_app()
         return self._app
 
-    def register_routes(self):
+    def register_actions(self):
         """
         Register all the routes to the dash board. Only css route is added
         :return: None
         """
-        for r in self.routes():
-            log.info("Adding route: {}".format(r.get('url')))
-            self._app._add_url(r.get('url'), view_func=r.get('view_func'))
+        for action in self.api_action():
+            if action['type'] == "GET":
+                log.info("Setting GET action: {}".format(action.get('action')))
+                setattr(APIGetActions, action.get('action'), staticmethod(action.get('module')))
+            elif action['type'] == "POST":
+                log.info("Setting POST action: {}".format(action.get('action')))
+                setattr(APIPostActions, action.get('action'), staticmethod(action.get('module')))
+            else:
+                raise errors.PluginError("Not Implemented - supports GET or POST actions")
+
+        log.info("Adding API route..")
+        self._app._add_url("{}/<action_name>".format(self.api_url), view_func=APIResponseObject.actions)
 
     def prepare_app(self):
         """
         Add all layout and components to the dash application
         :return: None
         """
+
         import os
         import logging.config
         logging_cnf = os.getcwd() + '/logger.ini'
         logging.config.fileConfig(logging_cnf)
-
+        log.info("Starting Application...............")
         # Register routes. This is used to call css
-        log.info("Adding routes")
-        self.register_routes()
+        self.register_actions()
 
         # Header
-        log.info("gathering header")
-        _header = self.header()
+        log.info("Gathering dash header component")
+        header = self.dash_header()
+
+        # Footer
+        log.info("Gathering dash footer")
+        footer = self.dash_footer()
 
         # Load components
-        log.info("loading components")
+        log.info("Loading dash components")
         children = []
-        _components = self.components()
+        _components = self.dash_components()
 
         for _c in _components:
             children.append(_components.get(_c))
 
-        # Create layout
-        log.info("Creating layout")
-        layout = html.Div([
-            _header,
-            html.Main(
-                children=[
-                    html.Div(
-                        children=[
-                            html.Div(
-                                children=children,
-                                id='page-content'
-                            )
-                        ],
-                        className="container"
-                    )
-                ]
-            )
+        # Gets dash layout
+        self._app.layout = self.dash_layout()(header, children, footer)
 
-        ])
-        self._app.layout = layout
+        callbacks = self.dash_callbacks()
 
-        @self._app.callback(
-            Output(component_id='history-country-action', component_property='children'),
-            [Input(component_id='history-country-action-input', component_property='value')]
-        )
-        def update_top_10_country_history(action):
-
-            return dcc.Graph(
-                id="history-cases-country",
-                figure=stats.top_10_countries_cases_by_time(action),
-                className="graph"
-            )
+        # TODO: Validate the callback
+        log.info("Adding dash callbacks")
+        for callback in callbacks:
+            self._app.callback(
+                callback.get('output'),
+                callback.get('input'),
+                callback.get('state')
+            )(callback.get('module'))

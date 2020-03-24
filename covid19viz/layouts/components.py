@@ -118,7 +118,7 @@ component_trending = html.Div(
             children=[
                 dcc.Graph(
                     id="highest-cases-country",
-                    figure=stats.top_10_countries_confirmed_cases(),
+                    figure=stats.top_n_countries_confirmed_cases(),
                     className="graph"
                 )
             ],
