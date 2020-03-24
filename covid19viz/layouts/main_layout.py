@@ -1,4 +1,5 @@
 import dash_html_components as html
+from covid19viz.toolkit import config
 import logging
 
 log = logging.getLogger(__name__)
@@ -26,11 +27,13 @@ def create_dash_layout(header, children, footer=None):
                             id='page-content'
                         )
                     ],
-                    className="container"
-                )
-            ]
-        )
-
-    ])
+                    className="container",
+                    style={"background-color": config.get("dash.ui.layout_background_color")}
+                    )
+                ],
+            )
+        ],
+        style={"background-color": config.get("dash.ui.component_background_color")}
+    )
 
     return layout

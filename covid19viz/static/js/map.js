@@ -1,4 +1,11 @@
 $(document).ready(function(event){
+$.ajax({
+   type: "GET",
+   url: "/api/v1/action/get_dash_ui_config",
+   dataType: 'json',
+   success: function(data){
+
+   var config = data['result'];
 
    $.ajax({
     type: "GET",
@@ -7,7 +14,7 @@ $(document).ready(function(event){
     success: function(data){
         var geojson = data;
         var checkExist = setInterval(function() {
-            if ($('#map').length) {
+            if ($(config['dash.ui.map_div_id']).length) {
 
                 mapboxgl.accessToken = "pk.eyJ1Ijoic3dhcm9vcGJoYXQxMjMiLCJhIjoiY2s4MmZleHZiMDUyMzNlcWtudWJxNHQ4byJ9.q_M3yDIf3UCUXD8jk8nelw";
                 var map = new mapboxgl.Map({
@@ -17,19 +24,29 @@ $(document).ready(function(event){
                     zoom: 1.2
                 });
 
+                // Disable scroll zoom
+                map.scrollZoom.disable();
+
+                // Add navigation control
+                map.addControl(new mapboxgl.NavigationControl())
+
+                // Full screen control
+                map.addControl(new mapboxgl.FullscreenControl())
+
+
                 var hoveredStateId = null;
                 var previousClickedStateId = null;
 
                 map.on('load', function() {
 
-                    map.addSource('countries', {
+                    map.addSource(config['dash.ui.map_source'], {
                          'type':'geojson',
                          'data':geojson
                     });
                     map.addLayer({
                         'id': 'covid',
                         'type': 'fill',
-                        'source': "countries",
+                        'source': config['dash.ui.map_source'],
                         'interactive': true,
                         'layout': {},
                         'paint': {
@@ -37,8 +54,8 @@ $(document).ready(function(event){
                             'fill-color': [
                                 'case',
                                 ['boolean', ['feature-state', 'clicked'], false],
-                                '#ffcc00',
-                                '#18607e'
+                                config['dash.ui.map_polygon_click'],
+                                config['dash.ui.map_polygon_color']
                             ],
                             'fill-opacity': [
                                 'case',
@@ -56,13 +73,13 @@ $(document).ready(function(event){
                         if (e.features.length > 0) {
                             if (hoveredStateId) {
                                 map.setFeatureState(
-                                { source: 'countries', id: hoveredStateId },
+                                { source: config['dash.ui.map_source'], id: hoveredStateId },
                                 { hover: false }
                                 );
                             }
                             hoveredStateId = e.features[0].id;
                             map.setFeatureState(
-                                { source: 'countries', id: hoveredStateId },
+                                { source: config['dash.ui.map_source'], id: hoveredStateId },
                                 { hover: true }
                             );
                         }
@@ -73,21 +90,12 @@ $(document).ready(function(event){
                     map.on('mouseleave', 'covid', function() {
                         if (hoveredStateId) {
                             map.setFeatureState(
-                                { source: 'countries', id: hoveredStateId },
+                                { source: config['dash.ui.map_source'], id: hoveredStateId },
                                 { hover: false }
                             );
                         }
                         hoveredStateId = null;
                     });
-
-                    // Disable scroll zoom
-                    map.scrollZoom.disable();
-
-                    // Add navigation control
-                    map.addControl(new mapboxgl.NavigationControl())
-
-                    // Full screen control
-                    map.addControl(new mapboxgl.FullscreenControl())
 
 
                     // Click event
@@ -98,21 +106,23 @@ $(document).ready(function(event){
                           }
                           var feature = features[0];
                           var country = feature['properties']['ADMIN']
-                          if (feature['source'] == "countries"){
-                              // Click Event
-
+                          if (feature['source'] == config['dash.ui.map_source']){
+                              // Remove previously selected polygon
                               if (previousClickedStateId){
                                 map.setFeatureState(
-                                    { source: 'countries', id: previousClickedStateId },
+                                    { source: config['dash.ui.map_source'], id: previousClickedStateId },
                                     { clicked: false }
                                 );
                               }
-
+                              // Add current polygon
                               previousClickedStateId = feature.id;
                               map.setFeatureState(
-                                { source: 'countries', id: previousClickedStateId },
+                                { source: config['dash.ui.map_source'], id: previousClickedStateId },
                                 { clicked: true }
                             );
+
+                            // Add pop up
+                            new mapboxgl.Popup().setLngLat(e.lngLat).setHTML(feature.properties.html).addTo(map);
 
                           }
 
@@ -124,6 +134,7 @@ $(document).ready(function(event){
             }, 100);
             // check every 100ms
     }
-});
-
+  });
+  }
+ });
 });

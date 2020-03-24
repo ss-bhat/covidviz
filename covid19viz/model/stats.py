@@ -2,6 +2,7 @@ from covid19viz.toolkit import covid_data
 from collections import OrderedDict
 from dateutil.parser import parse
 from covid19viz.utils import helper as h
+from covid19viz.toolkit import config
 from functools import lru_cache
 import logging
 
@@ -25,11 +26,10 @@ def top_n_countries_confirmed_cases():
     """
 
     # Set color code
-    # TODO: Take this from config
     actions = OrderedDict([
-        ("confirmed", "rgb(255, 204, 0, 1)"),
-        ("recovered", "rgb(127, 255, 0, 1)"),
-        ("deaths", "rgb(220, 53, 69, 1)"),
+        ("confirmed", config.get('dash.ui.confirmed_color')),
+        ("recovered", config.get('dash.ui.recovered_color')),
+        ("deaths", config.get('dash.ui.deaths_color')),
         ("label", "")
     ])
 
@@ -134,9 +134,9 @@ def top_n_percentage_change(action):
     """
     # TODO: Take this from config
     _actions = OrderedDict([
-        ("confirmed", "rgb(255, 204, 0, 0.8)"),
-        ("recovered", "rgb(127, 255, 0, 0.8)"),
-        ("deaths", "rgb(220, 53, 69, 0.8)"),
+        ("confirmed", config.get('dash.ui.confirmed_color')),
+        ("recovered", config.get('dash.ui.recovered_color')),
+        ("deaths", config.get('dash.ui.deaths_color')),
     ])
 
     _countries = covid_data.show_available_countries()
@@ -249,7 +249,6 @@ def get_current_stats_for_country(country="ireland"):
     :param country: str
     :return: dict
     """
-    # TODO: Take this from config
     _actions = OrderedDict([
         ("confirmed", "rgb(255, 204, 0, 0.8)"),
         ("recovered", "rgb(127, 255, 0, 0.8)"),

@@ -37,3 +37,7 @@ class PluginError(BaseAppException):
 
 class NotImplemented(BaseAppException):
     pass
+
+
+class DashConfigError(BaseAppException):
+    pass

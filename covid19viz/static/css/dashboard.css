@@ -1,11 +1,4 @@
-
-body {
-  background-color: #15658e!important;
-  color: #ffff!important;
-}
-
 header{
-    background-color: #094770;
     justify-content: left!important;
 }
 
@@ -29,7 +22,6 @@ header{
 .container{
     margin-top: 2%;
     margin-bottom: 2%;
-    background-color: #0a4871;
     border-radius: 10px;
 }
 
@@ -52,20 +44,7 @@ header{
 }
 
 .stats-card{
-    background-color: #18607e;
     border-radius: 10px
-}
-
-.card1{
-    color: #ffcc00;
-}
-
-.card2{
-    color: chartreuse;
-}
-
-.card3{
-    color: #e89a80;
 }
 
 .dopdown-div{
@@ -81,18 +60,6 @@ header{
 .radio-button-label{
     margin-left: 10%;
     margin-right: 10%;
-}
-
-.radio-button-label:nth-child(1){
-    color: #ffcc00;
-}
-
-.radio-button-label:nth-child(2){
-    color: chartreuse;
-}
-
-.radio-button-label:nth-child(3){
-    color: #e89a80;
 }
 
 .graph{

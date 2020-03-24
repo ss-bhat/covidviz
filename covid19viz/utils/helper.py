@@ -1,7 +1,7 @@
 import os
 import glob
 from covid19viz.utils import errors
-from covid19viz.toolkit import covid_data
+from covid19viz.toolkit import covid_data, config
 from functools import lru_cache
 import logging
 
@@ -69,8 +69,7 @@ def sort_data(data, action):
     :param data: list
     :return: list
     """
-    # TODO: Take this from config
-    extract_top = 10
+    extract_top = int(config.get('dash.dash.top_n', 10))
     return sorted(data, key=lambda k: k[action], reverse=True)[:extract_top]
 
 
@@ -93,11 +92,11 @@ def get_plot_layout(title=None, x_title=None, y_title=None):
     :param y_title: str
     :return: dict
     """
-    # TODO: Take this from config. Plot background color and text font color
+
     return dict(
         title=title,
-        plot_bgcolor="#18607e",
-        paper_bgcolor="#18607e",
+        plot_bgcolor=config.get('dash.ui.component_background_color'),
+        paper_bgcolor=config.get('dash.ui.component_background_color'),
         xaxis={
             'title': x_title
         },
@@ -105,7 +104,8 @@ def get_plot_layout(title=None, x_title=None, y_title=None):
             'title': y_title
         },
         font=dict(
-            color="#ffff"
+            color=config.get('dash.ui.text_color')
         ),
         hovermode='closest'
     )
+

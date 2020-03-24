@@ -1,5 +1,6 @@
 from covid19viz.logic import api
 from collections import OrderedDict
+from covid19viz.utils import helper as h
 from covid19viz.layouts import components, header, main_layout
 from dash.dependencies import Input, Output
 from covid19viz.logic import callbacks
@@ -51,8 +52,8 @@ class CovIdDashBoardAPIPlugin:
         """
         dash_components = OrderedDict([
             ("stats", components.component_stats),
-            ("graph", components.component_graph),
             ("map", components.component_map),
+            ("graph", components.component_graph),
             ("trending", components.component_trending),
             ("history", components.component_history)
         ])
@@ -145,6 +146,11 @@ class CovIdDashBoardAPIPlugin:
                 "type": "GET",
                 "module": api.get_history_by_province
 
+            },
+            {
+                "action": "get_dash_ui_config",
+                "type": "GET",
+                "module": api.get_dash_ui_config
             }
         )
 

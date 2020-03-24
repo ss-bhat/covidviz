@@ -1,6 +1,7 @@
 import dash_html_components as html
 import dash_core_components as dcc
 from covid19viz.model import stats, map
+from covid19viz.toolkit import config
 
 _stats = stats.get_statistics()
 
@@ -20,7 +21,11 @@ component_stats = html.Div(
                     """.format(_stats['confirmed'])
                 )
             ],
-            className="stats-card card1"
+            className="stats-card card1",
+            style={
+                "background-color": config.get('dash.ui.component_background_color'),
+                "color": config.get('dash.ui.confirmed_color')
+            }
         ),
         html.Div(
             children=[
@@ -35,7 +40,11 @@ component_stats = html.Div(
                     """.format(_stats['recovered'])
                 )
             ],
-            className="stats-card card2"
+            className="stats-card card2",
+            style={
+                "background-color": config.get('dash.ui.component_background_color'),
+                "color": config.get('dash.ui.recovered_color')
+            }
         ),
         html.Div(
             children=[
@@ -50,7 +59,11 @@ component_stats = html.Div(
                     """.format(_stats['deaths'])
                 )
             ],
-            className="stats-card card3"
+            className="stats-card card3",
+            style={
+                "background-color": config.get('dash.ui.component_background_color'),
+                "color": config.get('dash.ui.deaths_color')
+            }
         )
     ],
     id="stats",
@@ -93,6 +106,9 @@ component_graph = html.Div(
                             )
                     ],
                     className="stats-card",
+                    style={
+                        "background-color": config.get('dash.ui.component_background_color')
+                    }
                 ),
                 html.Div(
                     children=[
@@ -102,7 +118,10 @@ component_graph = html.Div(
                             className="graph"
                         )
                     ],
-                    className="stats-card"
+                    className="stats-card",
+                    style={
+                        "background-color": config.get('dash.ui.component_background_color')
+                    }
                 )
             ],
             id="update-graph",
@@ -122,7 +141,10 @@ component_trending = html.Div(
                     className="graph"
                 )
             ],
-            className="stats-card"
+            className="stats-card",
+            style={
+                "background-color": config.get('dash.ui.component_background_color')
+            }
         )
 
     ],
@@ -143,17 +165,23 @@ component_history = html.Div(
                         value='confirmed',
                         className="radio-buttons",
                         labelClassName="radio-button-label",
-                        id="history-country-action-input"
+                        id="history-country-action-input",
+                        style={
+                            "color": config.get('dash.ui.text_color')
+                        }
                     ),
                 html.Div(
                     id="history-country-action"
                 )
             ],
-            className="stats-card"
+            className="stats-card",
+            style={
+                "background-color": config.get('dash.ui.component_background_color')
+            }
         )
 
     ],
     id="trending-history",
-    className="flex-container"
+    className="flex-container",
 )
 

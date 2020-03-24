@@ -1,5 +1,6 @@
 from covid19viz.utils import errors
 from covid19viz.toolkit import covid_data
+from covid19viz.toolkit import config
 import logging
 
 log = logging.getLogger(__name__)
@@ -87,4 +88,16 @@ def get_history_by_province(context, data_dict):
         raise errors.APIParameterError("Missing country parameter")
 
     return covid_data.get_history_by_province(data_dict.get('province'))
+
+
+def get_dash_ui_config(context, data_dict):
+    """
+    Get dash UI config from the predefined config
+    :return:
+    """
+    ui_config = dict()
+    for key in config:
+        if "dash.ui" in key:
+            ui_config[key] = config.get(key)
+    return ui_config
 

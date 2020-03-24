@@ -46,12 +46,11 @@ class RegisterDashApplication(CovIdDashBoardAPIPlugin):
         Add all layout and components to the dash application
         :return: None
         """
-
         import os
         import logging.config
         logging_cnf = os.getcwd() + '/logger.ini'
         logging.config.fileConfig(logging_cnf)
-        log.info("Starting Application...............")
+
         # Register routes. This is used to call css
         self.register_actions()
 
@@ -74,9 +73,9 @@ class RegisterDashApplication(CovIdDashBoardAPIPlugin):
         # Gets dash layout
         self._app.layout = self.dash_layout()(header, children, footer)
 
+        # Add dash callbacks
         callbacks = self.dash_callbacks()
 
-        # TODO: Validate the callback
         log.info("Adding dash callbacks")
         for callback in callbacks:
             self._app.callback(
@@ -84,3 +83,4 @@ class RegisterDashApplication(CovIdDashBoardAPIPlugin):
                 callback.get('input'),
                 callback.get('state')
             )(callback.get('module'))
+

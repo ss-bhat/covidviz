@@ -1,8 +1,6 @@
-import folium
-import dash_core_components as dcc
-import dash_html_components as html
 from covid19viz.utils import helper as h
-from covid19viz.toolkit import covid_data
+from covid19viz.toolkit import covid_data, config
+from dateutil.parser import parse
 import json
 import logging
 
@@ -21,104 +19,6 @@ country_mapping = {
 
 
 }
-
-
-def get_map1():
-    """
-    Get leaflet map
-    :return: map object
-    """
-    _static_dir = h.get_static_dir_path()
-    m = folium.Map([53.350140, -6.266155], zoom_start=2)
-    _geojson_file = "{}/clean_countries.geojson".format(_static_dir)
-
-    with open(_geojson_file, 'r') as f:
-        geojson = json.load(f)
-        f.close()
-
-    folium.TileLayer('cartodbdark_matter').add_to(m)
-    folium.GeoJson(
-        geojson,
-        style_function=lambda x: {
-            'fillColor': '#18607e',
-            'color': 'black',
-            'weight': 1,
-            'fillOpacity': 0.7
-        },
-        highlight_function=lambda x: {
-            'fillOpacity': 1
-        },
-        tooltip=folium.features.GeoJsonTooltip(
-            fields=['id'],
-            aliases=['Country:'],
-        )
-    ).add_to(m)
-    m.save("{}/geojson.html".format(_static_dir))
-
-    element = html.Iframe(
-                    id='map-iframe',
-                    srcDoc=open("{}/geojson.html".format(_static_dir), 'r').read(),
-                    width='100%', height='700'
-                )
-
-    return element
-
-
-def get_map():
-    _static_dir = h.get_static_dir_path()
-    _geojson_file = "{}/data/clean_countries.geojson".format(_static_dir)
-    _token = "pk.eyJ1Ijoic3dhcm9vcGJoYXQxMjMiLCJhIjoiY2s4MmZleHZiMDUyMzNlcWtudWJxNHQ4byJ9.q_M3yDIf3UCUXD8jk8nelw"
-    with open(_geojson_file, 'r') as f:
-        geojson = json.load(f)
-        f.close()
-
-    layer = dict(
-        type="fill",
-        below='traces',
-        color="#18607e",
-        opacity=0.7,
-        hovermode="closest",
-        interactive=True,
-        text=[x['properties']['id'] for x in geojson['features']],
-        source=geojson,
-        sourcetype="geojson"
-
-    )
-
-    element = dcc.Graph(
-                id='TxWCD-choropleth',
-                figure=dict(
-                    data=[dict(
-                        type='scattermapbox'
-                    )],
-                    layout=dict(
-                            plot_bgcolor="#18607e",
-                            paper_bgcolor="#18607e",
-                            clickmode="event+select",
-                            mapbox=dict(
-                                layers=[layer],
-                                accesstoken=_token,
-                                center=dict(
-                                    lat=53.350140,
-                                    lon=-6.266155
-                                ),
-                                zoom=1,
-                                style='light'
-                            ),
-                            height=600,
-                            autosize=True,
-                            margin=dict(
-                                l=0,
-                                r=0,
-                                b=0,
-                                t=0,
-                                pad=4
-                            )
-                    )
-                )
-            )
-
-    return element
 
 
 def get_polygons_geojson():
@@ -140,10 +40,30 @@ def get_polygons_geojson():
         for item in geojson:
             _ctr = item['properties']['ADMIN'].lower()
             _ctr = country_mapping.get(_ctr, _ctr)
+
             if _ctr in _countries:
+                _data = covid_data.filter_by_country(_ctr)
                 item['properties']['ADMIN'] = _ctr
                 item['properties']['id'] = _ctr
                 item['id'] = _id
+
+                item['properties']['html'] = """
+                    <strong>Country:</strong> {label}<br>
+                    <strong>Confirmed:</strong> {confirmed}<br>
+                    <strong>Recovered:</strong> {recovered}<br>
+                    <strong>Deaths:</strong> {deaths}<br>
+                    <strong>Last Updated:</strong> {last_updated}
+                """.format(
+                    label=_data['label'],
+                    confirmed=_data['confirmed'],
+                    c_confirmed=config.get('dash.ui.confirmed_color'),
+                    recovered=_data['recovered'],
+                    c_recovered=config.get('dash.ui.recovered_color'),
+                    deaths=_data['deaths'],
+                    c_deaths=config.get('dash.ui.deaths_color'),
+                    last_updated=str(parse(_data['last_updated']).date()),
+                )
+
                 _id += 1
                 features.append(item)
                 found_countries.append(_ctr)
@@ -157,4 +77,3 @@ def get_polygons_geojson():
     with open("{}/data/clean_countries.geojson".format(_static_dir), 'w') as f:
         json.dump(required_geojson, f)
         f.close()
-
