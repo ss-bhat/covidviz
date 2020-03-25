@@ -4,6 +4,7 @@ from covid19viz.utils import helper as h
 from covid19viz.toolkit import APIGetActions, APIPostActions
 from covid19viz.utils import errors
 from covid19viz.controller.controller import APIResponseObject
+import flask
 import logging
 
 log = logging.getLogger(__name__)
@@ -83,4 +84,14 @@ class RegisterDashApplication(CovIdDashBoardAPIPlugin):
                 callback.get('input'),
                 callback.get('state')
             )(callback.get('module'))
+
+        @self._app.server.route("/data/polygon.geojson")
+        def get_geojson_polygon():
+            """
+            Hack to avoid webpack caching
+            :return:
+            """
+            file_name = "{}/data/polygon.geojson".format(h.get_static_dir_path())
+            response = flask.send_file(file_name, mimetype="application/json", as_attachment=True)
+            return response
 

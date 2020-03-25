@@ -28,7 +28,6 @@ def top_n_countries_confirmed_cases():
     # Set color code
     actions = OrderedDict([
         ("confirmed", config.get('dash.ui.confirmed_color')),
-        ("recovered", config.get('dash.ui.recovered_color')),
         ("deaths", config.get('dash.ui.deaths_color')),
         ("label", "")
     ])
@@ -135,7 +134,6 @@ def top_n_percentage_change(action):
     # TODO: Take this from config
     _actions = OrderedDict([
         ("confirmed", config.get('dash.ui.confirmed_color')),
-        ("recovered", config.get('dash.ui.recovered_color')),
         ("deaths", config.get('dash.ui.deaths_color')),
     ])
 
@@ -199,10 +197,10 @@ def get_stats_by_country(country="ireland"):
     """
     # TODO: Take this from config
     _actions = OrderedDict([
-        ("confirmed", "rgb(255, 204, 0, 0.8)"),
-        ("recovered", "rgb(127, 255, 0, 0.8)"),
-        ("deaths", "rgb(220, 53, 69, 0.8)"),
+        ("confirmed", config.get('dash.ui.confirmed_color')),
+        ("deaths", config.get('dash.ui.deaths_color'))
     ])
+
     data = list(covid_data.get_history_by_country(country).values())[0]
     country_label = data['label']
     title = "Historical Data for - {}".format(country_label)
@@ -250,9 +248,8 @@ def get_current_stats_for_country(country="ireland"):
     :return: dict
     """
     _actions = OrderedDict([
-        ("confirmed", "rgb(255, 204, 0, 0.8)"),
-        ("recovered", "rgb(127, 255, 0, 0.8)"),
-        ("deaths", "rgb(220, 53, 69, 0.8)"),
+        ("confirmed", config.get('dash.ui.confirmed_color')),
+        ("deaths", config.get('dash.ui.deaths_color'))
     ])
 
     _data = list(covid_data.get_history_by_country(country).values())[0]

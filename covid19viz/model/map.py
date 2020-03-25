@@ -31,8 +31,8 @@ def get_polygons_geojson():
     _static_dir = h.get_static_dir_path()
     _countries_geojson_file = "{}/data/countries.geojson".format(_static_dir)
 
-    required_geojson = {"type": "FeatureCollection", "features":[]}
-    features = required_geojson['features']
+    required_polygon_geojson = {"type": "FeatureCollection", "features":[]}
+    features = required_polygon_geojson['features']
     found_countries = []
     _id = 1
     with open(_countries_geojson_file, 'r') as f:
@@ -50,17 +50,12 @@ def get_polygons_geojson():
                 item['properties']['html'] = """
                     <strong>Country:</strong> {label}<br>
                     <strong>Confirmed:</strong> {confirmed}<br>
-                    <strong>Recovered:</strong> {recovered}<br>
                     <strong>Deaths:</strong> {deaths}<br>
                     <strong>Last Updated:</strong> {last_updated}
                 """.format(
                     label=_data['label'],
                     confirmed=_data['confirmed'],
-                    c_confirmed=config.get('dash.ui.confirmed_color'),
-                    recovered=_data['recovered'],
-                    c_recovered=config.get('dash.ui.recovered_color'),
                     deaths=_data['deaths'],
-                    c_deaths=config.get('dash.ui.deaths_color'),
                     last_updated=str(parse(_data['last_updated']).date()),
                 )
 
@@ -72,8 +67,45 @@ def get_polygons_geojson():
     print("TOTAL AVAILABLE COUNTRIES: {}".format(str(len(_countries))))
     print("TOTAL FOUND: {}".format(str(len(found_countries))))
     print("NOT FOUND: {}".format(str(len(_countries)-len(found_countries))))
-    print(set(_countries).difference(set(found_countries)))
+    #print(set(_countries).difference(set(found_countries)))
 
-    with open("{}/data/clean_countries.geojson".format(_static_dir), 'w') as f:
-        json.dump(required_geojson, f)
+    print("Gathering data for regions/province")
+
+    _provinces = covid_data.show_available_regions()
+    required_marker_geojson = {"type": "FeatureCollection", "features": []}
+    m_features = required_marker_geojson['features']
+
+    for province in _provinces:
+        province_data = covid_data.filter_by_province(province)
+        feature = {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    province_data['long'],
+                    province_data['lat']
+                ]
+            },
+            "properties": {
+                "html": """
+                            <strong>Province:</strong> {label}<br>
+                            <strong>Confirmed:</strong> {confirmed}<br>
+                            <strong>Deaths:</strong> {deaths}<br>
+                            <strong>Last Updated:</strong> {last_updated}
+                        """.format(
+                            label=province_data['label'],
+                            confirmed=province_data['confirmed'],
+                            deaths=province_data['deaths'],
+                            last_updated=str(parse(province_data['last_updated']).date()),
+                        )
+            }
+
+        }
+        m_features.append(feature)
+
+    with open("{}/data/polygon.geojson".format(_static_dir), 'w') as f:
+        json.dump({
+            "polygon_layer": required_polygon_geojson,
+            "marker_layer": required_marker_geojson
+        }, f)
         f.close()

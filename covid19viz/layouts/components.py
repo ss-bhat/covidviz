@@ -33,25 +33,6 @@ component_stats = html.Div(
                     src="/assets/img/virus2.png",
                     className="logo"
                 ),
-                "TOTAL RECOVERED",
-                dcc.Markdown(
-                    children="""
-                    #### {}
-                    """.format(_stats['recovered'])
-                )
-            ],
-            className="stats-card card2",
-            style={
-                "background-color": config.get('dash.ui.component_background_color'),
-                "color": config.get('dash.ui.recovered_color')
-            }
-        ),
-        html.Div(
-            children=[
-                html.Img(
-                    src="/assets/img/virus2.png",
-                    className="logo"
-                ),
                 "TOTAL DEATHS",
                 dcc.Markdown(
                     children="""
@@ -159,7 +140,6 @@ component_history = html.Div(
                 dcc.RadioItems(
                         options=[
                             {'label': '  Confirmed', 'value': 'confirmed'},
-                            {'label': '  Recovered', 'value': 'recovered'},
                             {'label': '  Deaths', 'value': 'deaths'}
                         ],
                         value='confirmed',
