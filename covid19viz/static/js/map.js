@@ -54,7 +54,7 @@ $.ajax({
                         // color circles by ethnicity, using a match expression
                         // https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-match
                         'circle-color': config['dash.ui.marker_color'],
-                        'circle-opacity': 0.6,
+                        'circle-opacity': 0.7,
                         'circle-stroke-color': config['dash.ui.circle_stroke_color'],
                         'circle-stroke-width': 0.3
                         }
@@ -69,7 +69,7 @@ $.ajax({
                 mapboxgl.accessToken = "pk.eyJ1Ijoic3dhcm9vcGJoYXQxMjMiLCJhIjoiY2s4MmZleHZiMDUyMzNlcWtudWJxNHQ4byJ9.q_M3yDIf3UCUXD8jk8nelw";
                 var map = new mapboxgl.Map({
                     container: 'map',
-                    style: 'mapbox://styles/mapbox/light-v10',
+                    style: 'mapbox://styles/mapbox/dark-v10',
                     center: [52.350140, 30.266155],
                     zoom: 1.2
                 });
@@ -177,12 +177,18 @@ $.ajax({
                           var country = feature['properties']['ADMIN']
                           if (feature['source'] == config['dash.ui.map_source']){
 
-                            // Remove pop up
-                            popup.remove();
-                            // Add data and layer to map
-                            map.setView(e.lngLat, map.setZoom(zoomThreshold+0.1));
-                            //map.addLayer(marker_layer_layout);
-                            //map.removeLayer('covid');
+                              // Remove pop up
+                              popup.remove();
+                             // Add data and layer to map
+                            map.flyTo({
+                                  center: e.lngLat,
+                                  zoom: zoomThreshold+0.1,
+                                  speed: 0.6,
+                                  curve: 1,
+                                  easing(t) {
+                                    return t;
+                                  }
+                                });
 
                           }
 
@@ -191,8 +197,7 @@ $.ajax({
 
                     // Zoom in and zoom out toggle layer based on zoom threshold
                     map.on('zoom', function() {
-                        console.log(map.getLayer('covid'))
-                        console.log(map.getZoom())
+
                         if (map.getZoom() > zoomThreshold){
                             if (map.getLayer('covid')){
                                 map.removeLayer('covid');

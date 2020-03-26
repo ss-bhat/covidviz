@@ -65,3 +65,13 @@ header{
 .graph{
     border-radius: 10px;
 }
+
+.Select-menu-outer{
+    background-color: #111517;
+    max-width: 50%;
+    color: #ffffff;
+}
+
+.Select-value-label{
+    color: #ffffff!important;
+}

@@ -78,6 +78,12 @@ class CovIdDashBoardAPIPlugin:
                 "input": [Input(component_id='history-country-action-input', component_property='value')],
                 "state": []
             },
+            {
+                "module": callbacks.update_historical_data_for_country,
+                "output": Output(component_id='update-graph', component_property='children'),
+                "input": [Input(component_id='select-country', component_property='value')],
+                "state": []
+            },
         )
 
         return dash_callbacks

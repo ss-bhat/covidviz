@@ -1,15 +1,11 @@
 import dash_html_components as html
 from covid19viz.toolkit import config
-
+from covid19viz.utils import helper as h
 
 header = html.Header(
     children=[
-        html.Img(
-            src="/assets/img/virus2.png",
-            className="logo"
-        ),
         html.H3(
-            children=config.get('dash.app_title'),
+            children="{} - {}".format(config.get('dash.app_title'), h.get_last_updated_date(as_string=True)),
             className="logo-text",
             style={
                 "color": config.get('dash.ui.text_color')

@@ -189,7 +189,7 @@ def top_n_percentage_change(action):
     return figure
 
 
-def get_stats_by_country(country="ireland"):
+def get_stats_by_country(country=config.get('dash.default_country')):
     """
     Get historical statistics for the given country data
     :param country: str (default ireland)
@@ -241,7 +241,7 @@ def get_stats_by_country(country="ireland"):
     return figure
 
 
-def get_current_stats_for_country(country="ireland"):
+def get_current_stats_for_country(country=config.get('dash.default_country')):
     """
     Gets current statistics for the country
     :param country: str
@@ -277,7 +277,7 @@ def get_current_stats_for_country(country="ireland"):
             y=y,
             text=text,
             name="ads",
-            opacity=0.6,
+            opacity=0.8,
             type="bar",
             marker=dict(
                 color=list(_actions.values())
@@ -286,9 +286,25 @@ def get_current_stats_for_country(country="ireland"):
     )
 
     figure['layout'] = h.get_plot_layout(
-        title='Current Data for the Country: {}'.format(_data['label'].title()),
+        title='Data as of {}: {}'.format(h.get_last_updated_date(as_string=True), _data['label'].title()),
         x_title='Cases',
         y_title='Count'
     )
 
     return figure
+
+
+def get_all_countries_options():
+    """
+    Get all the
+    :return:
+    """
+    _countries = covid_data.show_available_countries()
+    options = []
+    for _ctr in _countries:
+        options.append(
+            {
+                "label": _ctr, 'value': _ctr.lower()
+            }
+        )
+    return options
