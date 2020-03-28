@@ -77,3 +77,7 @@ header{
     border-style: solid;
     border-color: #ffffff;
 }
+
+.btn-outline-info {
+    border: none!important;
+}

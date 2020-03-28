@@ -80,3 +80,4 @@ def select_top_countries(value):
                     }
                 )
     return element
+
