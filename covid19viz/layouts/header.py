@@ -14,17 +14,16 @@ header = html.Header(
             html.Ul(
                 children=[
                     html.A(
-                        "API Documentation",
-                        href="https://github.com/gtkChop/covidviz/blob/master/README.md",
-                        target="_blank",
+                        "Dashboard",
+                        href="/",
                         className="navbar-brand btn btn-outline-info btn-sm"
                     ),
                     html.A(
-                        "About",
-                        href="https://github.com/gtkChop/covidviz/blob/master/README.md",
-                        target="_blank",
+                        "API Documentation",
+                        href="#",
+                        id="api-documentation",
                         className="navbar-brand btn btn-outline-info btn-sm"
-                    )
+                    ),
                 ],
                 className="navbar-nav"
             ),

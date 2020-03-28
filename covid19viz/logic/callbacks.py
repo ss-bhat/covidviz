@@ -3,6 +3,7 @@ import dash_html_components as html
 from dash.exceptions import PreventUpdate
 from covid19viz.toolkit import config
 from covid19viz.model import stats
+import os
 import logging
 
 log = logging.getLogger(__name__)
@@ -81,3 +82,20 @@ def select_top_countries(value):
                 )
     return element
 
+
+def get_api_documentation(click):
+    """
+    Get markdown from github
+    :return: markdown
+    """
+    if not click:
+        raise PreventUpdate
+
+    _dir = os.path.dirname(os.path.abspath(__file__))
+    with open("{}/README.md".format(_dir), 'r') as f:
+        content = f.read()
+        f.close()
+    return dcc.Markdown(
+        content,
+        style={'color': "#e4dede"}
+    )

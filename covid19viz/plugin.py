@@ -90,6 +90,12 @@ class CovIdDashBoardAPIPlugin:
                 "input": [Input(component_id="top-countries-action-input", component_property='value')],
                 "state": []
             },
+            {
+                "module": callbacks.get_api_documentation,
+                "output": Output(component_id='dash-page-content', component_property='children'),
+                "input": [Input(component_id="api-documentation", component_property='n_clicks')],
+                "state": []
+            },
         )
 
         return dash_callbacks

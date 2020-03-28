@@ -24,7 +24,7 @@ def create_dash_layout(header, children, footer=None):
                     children=[
                         html.Div(
                             children=children,
-                            id='page-content'
+                            id='dash-page-content'
                         )
                     ],
                     className="container",

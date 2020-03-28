@@ -81,3 +81,8 @@ header{
 .btn-outline-info {
     border: none!important;
 }
+
+.hljs {
+    color: #acbec5;
+    background: #000000;
+}

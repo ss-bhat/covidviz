@@ -27,7 +27,7 @@ def get_all_records_by_provinces(context, data_dict):
     Get all the records for all the available province
     :return: dict
     """
-    return covid_data.get_history_by_province()
+    return covid_data.get_all_records_by_provinces()
 
 
 def filter_by_country(context, data_dict):
@@ -47,9 +47,9 @@ def filter_by_province(context, data_dict):
     :return: dict
     """
     if "province" not in data_dict:
-        raise errors.APIParameterError("Missing country parameter")
+        raise errors.APIParameterError("Missing province parameter")
 
-    return covid_data.filter_by_country(data_dict.get('province'))
+    return covid_data.filter_by_province(data_dict.get('province'))
 
 
 def show_available_countries(context, data_dict):
