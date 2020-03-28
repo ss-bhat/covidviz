@@ -1,4 +1,3 @@
-from covid import CovId19Data
 from covid19viz.config import DashConfigParser
 
 
@@ -62,6 +61,5 @@ api_get = APIGetActions()
 api_post = APIGetActions()
 config = _get_config()
 
-_r = config.get("dash.api.real_time_data")
-covid_data = CovId19Data(force=True if _r.lower() == "true" else False)
+
 

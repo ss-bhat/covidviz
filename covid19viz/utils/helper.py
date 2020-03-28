@@ -1,8 +1,9 @@
 import os
 import glob
 from covid19viz.utils import errors
-from covid19viz.toolkit import covid_data, config
+from covid19viz.toolkit import config
 from dateutil.parser import parse
+from covid19viz.model import covid_data
 from functools import lru_cache
 import logging
 
@@ -118,8 +119,8 @@ def get_last_updated_date(as_string=False):
     """
     stats = covid_data.get_stats()
     last_updated = parse(stats['last_updated'])
-
     if as_string:
         return last_updated.strftime("%d %b, %Y")
     else:
         return last_updated
+

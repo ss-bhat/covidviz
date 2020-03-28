@@ -1,8 +1,8 @@
-from covid19viz.toolkit import covid_data
 from collections import OrderedDict
 from dateutil.parser import parse
 from covid19viz.utils import helper as h
 from covid19viz.toolkit import config
+from covid19viz.model import covid_data
 from functools import lru_cache
 import logging
 
@@ -15,7 +15,6 @@ def get_statistics():
     :return: dict
     """
     stats = covid_data.get_stats()
-
     return stats
 
 
@@ -28,6 +27,7 @@ def top_n_countries_confirmed_cases():
     # Set color code
     actions = OrderedDict([
         ("confirmed", config.get('dash.ui.confirmed_color')),
+        ("recovered", config.get('dash.ui.recovered_color')),
         ("deaths", config.get('dash.ui.deaths_color')),
         ("label", "")
     ])
@@ -98,18 +98,24 @@ def top_n_countries_cases_by_time(action):
         _history = h.get_history_by_country(ctry)
         x = []
         y = []
+        text = []
         for dt in _history:
             x.append(str(parse(dt).date()))
             y.append(_history[dt][action])
+            text.append(
+                "Country: {}<br>".format(ctry) +
+                "State: {}<br>".format(action) + "Last Updated: {}".format(str(parse(dt).date()))
+            )
 
         figure['data'].append(
             dict(
                 x=x,
                 y=y,
-                text=ctry,
+                text=text,
                 name=ctry,
                 opacity=2,
-                mode="lines+markers"
+                mode="lines+markers",
+                fill='tozeroy'
                 )
             )
 
@@ -123,81 +129,15 @@ def top_n_countries_cases_by_time(action):
     return figure
 
 
-@lru_cache(maxsize=3)
-def top_n_percentage_change(action):
-    """
-    Top n countries percentage change data.
-    TODO: Currently this is not implemented takes time to load
-    :param action: str
-    :return: dict
-    """
-    # TODO: Take this from config
-    _actions = OrderedDict([
-        ("confirmed", config.get('dash.ui.confirmed_color')),
-        ("deaths", config.get('dash.ui.deaths_color')),
-    ])
-
-    _countries = covid_data.show_available_countries()
-    change_dict = []
-    figure = dict()
-    figure['data'] = []
-
-    for ctry in _countries:
-        _history = h.get_history_by_country(ctry)
-        _last_reading = list(_history.keys())[-1]
-        change = _history[_last_reading]["change_{}".format(action)]
-        if change != "na":
-            change_dict.append(
-                {
-                    "label": ctry,
-                    "key": _last_reading,
-                    "value": float(change)
-                }
-            )
-
-    sorted_data = h.sort_data(change_dict, "value")
-
-    x = []
-    y = []
-    text = []
-    for item in sorted_data:
-        x.append(item['label'])
-        y.append(item['value'])
-        text.append("Country: {}<br>".format(item['label']) +
-                    "State: {}<br>".format(action)+"time: {}".format(item['key']))
-
-    figure['data'].append(
-        dict(
-            x=x,
-            y=y,
-            text=text,
-            name="ads",
-            opacity=0.6,
-            type="bar",
-            marker=dict(
-                color=_actions.get(action)
-            )
-        )
-    )
-
-    figure['layout'] = h.get_plot_layout(
-        title='Top 10 Change(Rate) - {}'.format(action),
-        x_title='Country',
-        y_title='Change'
-    )
-
-    return figure
-
-
 def get_stats_by_country(country=config.get('dash.default_country')):
     """
     Get historical statistics for the given country data
     :param country: str (default ireland)
     :return: dict
     """
-    # TODO: Take this from config
     _actions = OrderedDict([
         ("confirmed", config.get('dash.ui.confirmed_color')),
+        ("recovered", config.get('dash.ui.recovered_color')),
         ("deaths", config.get('dash.ui.deaths_color'))
     ])
 
@@ -249,6 +189,7 @@ def get_current_stats_for_country(country=config.get('dash.default_country')):
     """
     _actions = OrderedDict([
         ("confirmed", config.get('dash.ui.confirmed_color')),
+        ("recovered", config.get('dash.ui.recovered_color')),
         ("deaths", config.get('dash.ui.deaths_color'))
     ])
 
@@ -290,7 +231,6 @@ def get_current_stats_for_country(country=config.get('dash.default_country')):
         x_title='Cases',
         y_title='Count'
     )
-
     return figure
 
 

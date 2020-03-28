@@ -17,10 +17,29 @@ component_stats = html.Div(
                     """.format(_stats['confirmed'])
                 )
             ],
-            className="stats-card card1",
+            className="stats-card card",
             style={
                 "background-color": config.get('dash.ui.component_background_color'),
-                "color": config.get('dash.ui.confirmed_color')
+                "color": config.get('dash.ui.confirmed_color'),
+                "border-color": config.get('dash.ui.confirmed_color'),
+                "border-style": "solid"
+            }
+        ),
+        html.Div(
+            children=[
+                "TOTAL RECOVERED - {}".format(h.get_last_updated_date(as_string=True)),
+                dcc.Markdown(
+                    children="""
+                    ### {}
+                    """.format(_stats['recovered'])
+                )
+            ],
+            className="stats-card card",
+            style={
+                "background-color": config.get('dash.ui.component_background_color'),
+                "color": config.get('dash.ui.recovered_color'),
+                "border-color": config.get('dash.ui.recovered_color'),
+                "border-style": "solid"
             }
         ),
         html.Div(
@@ -32,10 +51,12 @@ component_stats = html.Div(
                     """.format(_stats['deaths'])
                 )
             ],
-            className="stats-card card3",
+            className="stats-card card",
             style={
                 "background-color": config.get('dash.ui.component_background_color'),
-                "color": config.get('dash.ui.deaths_color')
+                "color": config.get('dash.ui.deaths_color'),
+                "border-color": config.get('dash.ui.deaths_color'),
+                "border-style": "solid"
             }
         )
     ],
@@ -124,31 +145,36 @@ component_history = html.Div(
     children=[
         html.Div(
             children=[
-                dcc.RadioItems(
-                        options=[
-                            {'label': '  Confirmed', 'value': 'confirmed'},
-                            {'label': '  Deaths', 'value': 'deaths'}
-                        ],
-                        value='confirmed',
-                        className="radio-buttons",
-                        labelClassName="radio-button-label",
-                        id="history-country-action-input",
-                        style={
-                            "color": config.get('dash.ui.text_color')
-                        }
-                    ),
-                html.Div(
-                    id="history-country-action"
+                html.Label(
+                    children="Select Case: ",
+                    style={'color': config.get('dash.ui.text_color')}
+                ),
+                dcc.Dropdown(
+                    options=[
+                        {'label': '  Confirmed', 'value': 'confirmed'},
+                        {'label': '  Recovered', 'value': 'recovered'},
+                        {'label': '  Deaths', 'value': 'deaths'}
+                    ],
+                    value='confirmed',
+                    id="history-country-action-input",
+                    style={
+                        'maxWidth': "50%",
+                        'background-color': config.get('dash.ui.layout_background_color'),
+                        'color': config.get('dash.ui.text_color'),
+                        'maxHeight': "40px"
+                    },
                 )
             ],
-            className="stats-card",
             style={
-                "background-color": config.get('dash.ui.component_background_color')
+                "padding-left": "10px",
+                "margin-left": "10px"
             }
+        ),
+        html.Div(
+            id="history-country-action",
+            className="flex-container",
         )
-
     ],
-    id="trending-history",
-    className="flex-container",
+    id="trending-history"
 )
 

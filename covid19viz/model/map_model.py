@@ -1,6 +1,6 @@
 from covid19viz.utils import helper as h
-from covid19viz.toolkit import covid_data, config
 from dateutil.parser import parse
+from covid import CovId19Data
 import json
 import logging
 
@@ -26,6 +26,7 @@ def get_polygons_geojson():
 
     :return:
     """
+    covid_data = CovId19Data(force=True)
     _countries = covid_data.show_available_countries()
     _countries = [x.lower() for x in _countries]
     _static_dir = h.get_static_dir_path()
@@ -50,12 +51,14 @@ def get_polygons_geojson():
                 item['properties']['html'] = """
                     <strong>Country:</strong> {label}<br>
                     <strong>Confirmed:</strong> {confirmed}<br>
+                    <strong>Recovered:</strong> {recovered}<br>
                     <strong>Deaths:</strong> {deaths}<br>
                     <strong>Last Updated:</strong> {last_updated}
                 """.format(
-                    label=_data['label'],
-                    confirmed=_data['confirmed'],
-                    deaths=_data['deaths'],
+                    label=_data.get('label', 'NA'),
+                    confirmed=_data.get('confirmed', 'NA'),
+                    recovered=_data.get('recovered', 'NA'),
+                    deaths=_data.get('deaths', 'NA'),
                     last_updated=str(parse(_data['last_updated']).date()),
                 )
 
@@ -90,12 +93,14 @@ def get_polygons_geojson():
                 "html": """
                             <strong>Province:</strong> {label}<br>
                             <strong>Confirmed:</strong> {confirmed}<br>
+                            <strong>Recovered:</strong> {recovered}<br>
                             <strong>Deaths:</strong> {deaths}<br>
                             <strong>Last Updated:</strong> {last_updated}
                         """.format(
-                            label=province_data['label'],
-                            confirmed=province_data['confirmed'],
-                            deaths=province_data['deaths'],
+                            label=province_data.get('label', 'NA'),
+                            confirmed=province_data.get('confirmed', 'NA'),
+                            recovered=province_data.get('recovered', 'NA'),
+                            deaths=province_data.get('deaths', 'NA'),
                             last_updated=str(parse(province_data['last_updated']).date()),
                         )
             }

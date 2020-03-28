@@ -4,6 +4,9 @@ from covid19viz.utils import helper as h
 from covid19viz.toolkit import APIGetActions, APIPostActions
 from covid19viz.utils import errors
 from covid19viz.controller.controller import APIResponseObject
+from covid19viz.model import map_model as md, covid_data
+from dateutil.parser import parse
+from os import environ
 import flask
 import logging
 
@@ -91,6 +94,20 @@ class RegisterDashApplication(CovIdDashBoardAPIPlugin):
             Hack to avoid webpack caching
             :return:
             """
+            env_var = "DASH_LAST_UPDATED"
+            last_updated = covid_data.get_stats()['last_updated']
+            env_date = environ.get(env_var, '')
+
+            if not env_date:
+                log.info("Updating geojson layer")
+                environ[env_var] = last_updated
+                md.get_polygons_geojson()
+                env_date = last_updated
+
+            if parse(env_date) < parse(last_updated):
+                log.info("Updating geojson layer.")
+                md.get_polygons_geojson()
+
             file_name = "{}/data/polygon.geojson".format(h.get_static_dir_path())
             response = flask.send_file(file_name, mimetype="application/json", as_attachment=True)
             return response

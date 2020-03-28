@@ -183,7 +183,7 @@ $.ajax({
                             map.flyTo({
                                   center: e.lngLat,
                                   zoom: zoomThreshold+0.1,
-                                  speed: 0.6,
+                                  speed: 0.7,
                                   curve: 1,
                                   easing(t) {
                                     return t;

@@ -1,6 +1,6 @@
 from covid19viz.utils import errors
-from covid19viz.toolkit import covid_data
 from covid19viz.toolkit import config
+from covid19viz.model import covid_data
 import logging
 
 log = logging.getLogger(__name__)
