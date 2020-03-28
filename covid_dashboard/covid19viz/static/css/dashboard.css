@@ -1,0 +1,88 @@
+
+header{
+    justify-content: left!important;
+}
+
+.logo{
+    max-width: 50px;
+}
+
+.flex-container {
+  display: flex;
+  padding: 10px;
+  flex-direction: row;
+}
+
+.flex-container > div{
+  width: 100%;
+  margin: 10px;
+  text-align: center;
+  line-height: 75px;
+}
+
+.container{
+    margin-top: 2%;
+    margin-bottom: 3%;
+    border-radius: 10px;
+
+}
+
+@media (min-width: 992px){
+.container {
+    max-width: 96%!important;
+}
+}
+
+@media (min-width: 768px){
+.container {
+    max-width: 96%!important;
+}
+}
+
+@media (min-width: 576px){
+.container {
+    max-width: 96%!important;
+}
+}
+
+.stats-card{
+    border-radius: 10px;
+}
+
+.dopdown-div{
+    max-height: 30px;
+}
+
+.flex-container .stats-country{
+  display: flex;
+  padding: 10px;
+  flex-direction: column;
+}
+
+.graph{
+    border-radius: 10px;
+}
+
+.Select-menu-outer{
+    background-color: #111517;
+    max-width: 50%;
+    color: #ffffff;
+}
+
+.Select-value-label, #select-country, #history-country-action-input, #top-countries-action-input{
+    color: #ffffff!important;
+}
+
+.card{
+    border-style: solid;
+    border-color: #ffffff;
+}
+
+.btn-outline-info {
+    border: none!important;
+}
+
+.hljs {
+    color: #acbec5;
+    background: #000000;
+}
