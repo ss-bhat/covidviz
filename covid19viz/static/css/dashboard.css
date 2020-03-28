@@ -59,11 +59,6 @@ header{
   flex-direction: column;
 }
 
-.radio-button-label{
-    margin-left: 10%;
-    margin-right: 10%;
-}
-
 .graph{
     border-radius: 10px;
 }
@@ -74,7 +69,7 @@ header{
     color: #ffffff;
 }
 
-.Select-value-label, #select-country, #history-country-action-input{
+.Select-value-label, #select-country, #history-country-action-input, #top-countries-action-input{
     color: #ffffff!important;
 }
 

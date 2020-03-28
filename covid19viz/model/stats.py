@@ -18,7 +18,7 @@ def get_statistics():
     return stats
 
 
-def top_n_countries_confirmed_cases():
+def top_n_countries_confirmed_cases(value=10):
     """
     Get top n countries confirmed cases. Current data of confirmed, recovered and deaths
     :return: dict
@@ -35,7 +35,7 @@ def top_n_countries_confirmed_cases():
     _data = h.get_all_records_by_country()
 
     # Sort data on top confirmed cases
-    sorted_data = h.sort_data(_data, "confirmed")
+    sorted_data = h.sort_data(_data, "confirmed", value=value)
 
     figure = dict()
     stats = dict()

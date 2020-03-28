@@ -64,14 +64,15 @@ def get_all_records_by_country():
     return data
 
 
-def sort_data(data, action):
+def sort_data(data, action, value=10):
     """
     Extract top n data
     :param action: str
+    :param value: int
     :param data: list
     :return: list
     """
-    extract_top = int(config.get('dash.dash.top_n', 10))
+    extract_top = int(config.get('dash.dash.top_n', value))
     return sorted(data, key=lambda k: k[action], reverse=True)[:extract_top]
 
 

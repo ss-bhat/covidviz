@@ -124,21 +124,40 @@ component_trending = html.Div(
     children=[
         html.Div(
             children=[
-                dcc.Graph(
-                    id="highest-cases-country",
-                    figure=stats.top_n_countries_confirmed_cases(),
-                    className="graph"
+                html.Label(
+                    children="Top Countries: ",
+                    style={'color': config.get('dash.ui.text_color')}
+                ),
+                dcc.Dropdown(
+                    options=[
+                        {'label': '  10', 'value': 10},
+                        {'label': '  15', 'value': 15},
+                        {'label': '  20', 'value': 20}
+                    ],
+                    value='10',
+                    id="top-countries-action-input",
+                    placeholder="Select value",
+                    style={
+                        'maxWidth': "50%",
+                        'background-color': config.get('dash.ui.layout_background_color'),
+                        'color': config.get('dash.ui.text_color'),
+                        'maxHeight': "40px"
+                    },
                 )
             ],
-            className="stats-card",
+            id="trending",
             style={
-                "background-color": config.get('dash.ui.component_background_color')
+                "padding-left": "10px",
+                "margin-left": "10px"
             }
+        ),
+        html.Div(
+            children=[
+            ],
+            className="flex-container",
+            id="top-countries-stats"
         )
-
-    ],
-    id="trending",
-    className="flex-container"
+    ]
 )
 
 component_history = html.Div(
@@ -157,6 +176,7 @@ component_history = html.Div(
                     ],
                     value='confirmed',
                     id="history-country-action-input",
+                    placeholder="Select case",
                     style={
                         'maxWidth': "50%",
                         'background-color': config.get('dash.ui.layout_background_color'),

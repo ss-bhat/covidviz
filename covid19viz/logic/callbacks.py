@@ -60,3 +60,23 @@ def update_historical_data_for_country(country):
                 }
             )
         ]
+
+
+def select_top_countries(value):
+    """
+
+    :param value:
+    :return:
+    """
+    if not value:
+        raise PreventUpdate
+
+    element = dcc.Graph(
+                    id="highest-cases-country",
+                    figure=stats.top_n_countries_confirmed_cases(int(value)),
+                    className="graph",
+                    style={
+                        "background-color": config.get('dash.ui.component_background_color')
+                    }
+                )
+    return element
