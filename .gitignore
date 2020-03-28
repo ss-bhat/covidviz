@@ -36,3 +36,4 @@ __pycache__
 # Env
 covidviz_env/
 
+polygon.geojson

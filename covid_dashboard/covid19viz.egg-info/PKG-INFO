@@ -1,0 +1,18 @@
+Metadata-Version: 2.1
+Name: covid19viz
+Version: 1.0
+Summary: 
+                Dashboard for corono virus outbreak. Also contains some basic anasysis of the outbreak
+                
+Home-page: UNKNOWN
+Author: Swaroop
+Author-email: 
+License: MIT
+Description: UNKNOWN
+Keywords: Data extractor covid19
+Platform: UNKNOWN
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
