@@ -179,3 +179,5 @@ All used data sources [CSSEGISandData-covi19](https://github.com/CSSEGISandData/
 
 ###### Terms and Condition of this API:
 License: [MIT](https://github.com/gtkChop/covid19/blob/master/LICENSE)
+
+
