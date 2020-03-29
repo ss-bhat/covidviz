@@ -1,10 +1,15 @@
 from covid19viz.utils import helper as h
 from dateutil.parser import parse
 from covid import CovId19Data
+from covid19viz.model import harvest
 import json
 import logging
 
 log = logging.getLogger(__name__)
+
+_harvest_regional_mapping = {
+    "ireland": harvest.get_regional_data_ireland
+}
 
 country_mapping = {
     "south korea": 'korea, south',
@@ -19,6 +24,7 @@ country_mapping = {
 
 
 }
+
 
 
 def get_polygons_geojson():
@@ -80,33 +86,14 @@ def get_polygons_geojson():
 
     for province in _provinces:
         province_data = covid_data.filter_by_province(province)
-        feature = {
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    province_data['long'],
-                    province_data['lat']
-                ]
-            },
-            "properties": {
-                "html": """
-                            <strong>Province:</strong> {label}<br>
-                            <strong>Confirmed:</strong> {confirmed}<br>
-                            <strong>Recovered:</strong> {recovered}<br>
-                            <strong>Deaths:</strong> {deaths}<br>
-                            <strong>Last Updated:</strong> {last_updated}
-                        """.format(
-                            label=province_data.get('label', 'NA'),
-                            confirmed=province_data.get('confirmed', 'NA'),
-                            recovered=province_data.get('recovered', 'NA'),
-                            deaths=province_data.get('deaths', 'NA'),
-                            last_updated=str(parse(province_data['last_updated']).date()),
-                        )
-            }
-
-        }
+        feature = h.prepare_feature(province_data)
         m_features.append(feature)
+
+    for _harvest in _harvest_regional_mapping:
+        _provinces = _harvest_regional_mapping[_harvest]()
+        for province_data in _provinces:
+            feature = h.prepare_feature(province_data)
+            m_features.append(feature)
 
     with open("{}/data/polygon.geojson".format(_static_dir), 'w') as f:
         json.dump({

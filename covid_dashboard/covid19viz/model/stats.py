@@ -3,7 +3,6 @@ from dateutil.parser import parse
 from covid19viz.utils import helper as h
 from covid19viz.toolkit import config
 from covid19viz.model import covid_data
-from functools import lru_cache
 import logging
 
 log = logging.getLogger(__name__)

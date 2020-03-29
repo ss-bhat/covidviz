@@ -182,7 +182,7 @@ $.ajax({
                              // Add data and layer to map
                             map.flyTo({
                                   center: e.lngLat,
-                                  zoom: zoomThreshold+0.1,
+                                  zoom: zoomThreshold+0.5,
                                   speed: 0.7,
                                   curve: 1,
                                   easing(t) {

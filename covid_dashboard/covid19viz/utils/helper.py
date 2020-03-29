@@ -125,3 +125,41 @@ def get_last_updated_date(as_string=False):
     else:
         return last_updated
 
+
+def prepare_feature(province_data):
+    """
+    Prepare feature for geojson
+    :return: dict
+    """
+    try:
+        last_updated = str(parse(province_data['last_updated']).date())
+    except Exception as e:
+        last_updated = province_data.get('last_updated', "NA")
+
+    feature = {
+        "type": "Feature",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [
+                province_data['long'],
+                province_data['lat']
+            ]
+        },
+        "properties": {
+            "html": """
+                                <strong>Province:</strong> {label}<br>
+                                <strong>Confirmed:</strong> {confirmed}<br>
+                                <strong>Recovered:</strong> {recovered}<br>
+                                <strong>Deaths:</strong> {deaths}<br>
+                                <strong>Last Updated:</strong> {last_updated}
+                            """.format(
+                label=province_data.get('label', 'NA'),
+                confirmed=province_data.get('confirmed', 'NA'),
+                recovered=province_data.get('recovered', 'NA'),
+                deaths=province_data.get('deaths', 'NA'),
+                last_updated=last_updated,
+            )
+        }
+
+    }
+    return feature

@@ -1,6 +1,5 @@
 from covid19viz.logic import api
 from collections import OrderedDict
-from covid19viz.utils import helper as h
 from covid19viz.layouts import components, header, main_layout
 from dash.dependencies import Input, Output
 from covid19viz.logic import callbacks
