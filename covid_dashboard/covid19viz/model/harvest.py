@@ -14,6 +14,7 @@ def get_regional_data_ireland():
            'returnGeometry=true&spatialRel=esriSpatialRelIntersects&outFields=*&outSR=102100&' \
            'resultOffset=0&resultRecordCount=250'
     response = requests.get(_url)
+    log.info("Harvesting data for ireland.")
     if response.status_code == 200:
         data = response.json()['features']
         res = []

@@ -12,7 +12,7 @@ log = logging.getLogger(__name__)
 
 def get_static_dir_path():
     """
-    Get the static folder path
+    Get the static folder path.
     :return:
     """
     _this_dir = os.path.dirname(os.path.realpath(__file__))
@@ -57,7 +57,7 @@ def get_all_images_icons():
 @lru_cache(maxsize=1)
 def get_all_records_by_country():
     """
-    Get all records by country
+    Get all records by country.
     :return: dict
     """
     data = list(covid_data.get_all_records_by_country().values())
@@ -79,7 +79,7 @@ def sort_data(data, action, value=10):
 @lru_cache(maxsize=10)
 def get_history_by_country(country):
     """
-    get history data for the country
+    get history data for the country.
     :param country: str
     :return: list
     """
@@ -95,7 +95,7 @@ def get_plot_layout(title=None, x_title=None, y_title=None):
     :param y_title: str
     :return: dict
     """
-
+    log.info("Getting plot layout")
     return dict(
         title=title,
         plot_bgcolor=config.get('dash.ui.component_background_color'),
@@ -116,7 +116,7 @@ def get_plot_layout(title=None, x_title=None, y_title=None):
 def get_last_updated_date(as_string=False):
     """
     Get Last updated date
-    :return: date object or str
+    :return: date object or str.
     """
     stats = covid_data.get_stats()
     last_updated = parse(stats['last_updated'])
@@ -131,6 +131,7 @@ def prepare_feature(province_data):
     Prepare feature for geojson
     :return: dict
     """
+    log.info("Preparing feature for geojson")
     try:
         last_updated = str(parse(province_data['last_updated']).date())
     except Exception as e:

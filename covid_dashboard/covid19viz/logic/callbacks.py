@@ -31,6 +31,7 @@ def update_historical_data_for_country(country):
     :param country: str
     :return: dash div component
     """
+    log.info("callback for historical data for the country")
     if not country:
         raise PreventUpdate
     return [
@@ -69,6 +70,7 @@ def select_top_countries(value):
     :param value:
     :return:
     """
+    log.info("select top countries..")
     if not value:
         raise PreventUpdate
 
@@ -88,6 +90,7 @@ def get_api_documentation(click):
     Get markdown from github
     :return: markdown
     """
+    log.info("API documentation...")
     if not click:
         raise PreventUpdate
 

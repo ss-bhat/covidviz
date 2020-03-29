@@ -95,6 +95,7 @@ def get_dash_ui_config(context, data_dict):
     Get dash UI config from the predefined config
     :return:
     """
+    log.info("config to javascript")
     ui_config = dict()
     for key in config:
         if "dash.ui" in key:

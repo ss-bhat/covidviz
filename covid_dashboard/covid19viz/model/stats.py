@@ -13,6 +13,7 @@ def get_statistics():
     Current covid-19 stats.
     :return: dict
     """
+    log.info("Gathering total statistics")
     stats = covid_data.get_stats()
     return stats
 
@@ -30,7 +31,7 @@ def top_n_countries_confirmed_cases(value=10):
         ("deaths", config.get('dash.ui.deaths_color')),
         ("label", "")
     ])
-
+    log.info("Preparing data for top {} countries".format(value))
     _data = h.get_all_records_by_country()
 
     # Sort data on top confirmed cases
@@ -50,6 +51,7 @@ def top_n_countries_confirmed_cases(value=10):
     figure['data'] = []
 
     # Create bubble chart and calculate bubble size
+    log.info("Preparing bubble chart")
     for action in list(actions.keys())[:-1]:
         sizeref = 10. * max(stats[action]) / (100 ** 2)
         figure['data'].append(
@@ -84,7 +86,7 @@ def top_n_countries_cases_by_time(action):
     Get top n countries historical data till now
     :return: dict
     """
-
+    log.info("Preparing historical data for action: {}".format(action))
     data = h.get_all_records_by_country()
     sorted_data = h.sort_data(data, action)
     countries = [x.get('label') for x in sorted_data]
@@ -124,7 +126,7 @@ def top_n_countries_cases_by_time(action):
         x_title="Date",
         y_title="Count"
     )
-
+    log.info("Rendering fig data")
     return figure
 
 
@@ -134,6 +136,7 @@ def get_stats_by_country(country=config.get('dash.default_country')):
     :param country: str (default ireland)
     :return: dict
     """
+    log.info("Getting statistics for the country: {}".format(country))
     _actions = OrderedDict([
         ("confirmed", config.get('dash.ui.confirmed_color')),
         ("recovered", config.get('dash.ui.recovered_color')),
@@ -177,6 +180,7 @@ def get_stats_by_country(country=config.get('dash.default_country')):
         x_title="Date",
         y_title="Count"
     )
+    log.info("Rendering fig data for a given country")
     return figure
 
 
@@ -186,6 +190,7 @@ def get_current_stats_for_country(country=config.get('dash.default_country')):
     :param country: str
     :return: dict
     """
+    log.info("Getting current stats for the country: {}".format(country))
     _actions = OrderedDict([
         ("confirmed", config.get('dash.ui.confirmed_color')),
         ("recovered", config.get('dash.ui.recovered_color')),
@@ -230,6 +235,7 @@ def get_current_stats_for_country(country=config.get('dash.default_country')):
         x_title='Cases',
         y_title='Count'
     )
+    log.info("getting plot data")
     return figure
 
 
@@ -246,4 +252,6 @@ def get_all_countries_options():
                 "label": _ctr, 'value': _ctr.lower()
             }
         )
+
+    log.info("Gathering all options for the country..")
     return options

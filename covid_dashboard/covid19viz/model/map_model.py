@@ -26,10 +26,9 @@ country_mapping = {
 }
 
 
-
 def get_polygons_geojson():
     """
-
+    prepare polygon and marker geojson. Polygon for country and marker for region
     :return:
     """
     covid_data = CovId19Data(force=False)
@@ -42,6 +41,7 @@ def get_polygons_geojson():
     features = required_polygon_geojson['features']
     found_countries = []
     _id = 1
+    log.info("Preparing geojson")
     with open(_countries_geojson_file, 'r') as f:
         geojson = json.load(f)['features']
         for item in geojson:
@@ -73,12 +73,10 @@ def get_polygons_geojson():
                 found_countries.append(_ctr)
         f.close()
     del geojson
-    print("TOTAL AVAILABLE COUNTRIES: {}".format(str(len(_countries))))
-    print("TOTAL FOUND: {}".format(str(len(found_countries))))
-    print("NOT FOUND: {}".format(str(len(_countries)-len(found_countries))))
-    #print(set(_countries).difference(set(found_countries)))
-
-    print("Gathering data for regions/province")
+    log.info("TOTAL AVAILABLE COUNTRIES: {}".format(str(len(_countries))))
+    log.info("TOTAL FOUND: {}".format(str(len(found_countries))))
+    log.info("NOT FOUND: {}".format(str(len(_countries)-len(found_countries))))
+    log.info("Gathering data for regions/province")
 
     _provinces = covid_data.show_available_regions()
     required_marker_geojson = {"type": "FeatureCollection", "features": []}
@@ -95,6 +93,7 @@ def get_polygons_geojson():
             feature = h.prepare_feature(province_data)
             m_features.append(feature)
 
+    log.info("Saving geojson data")
     with open("{}/data/polygon.geojson".format(_static_dir), 'w') as f:
         json.dump({
             "polygon_layer": required_polygon_geojson,
