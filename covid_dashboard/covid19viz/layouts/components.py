@@ -72,17 +72,16 @@ component_map = html.Div(
                     children=[
                     ],
                     id="map",
-                    style={"height": "100%"},
+                    style={"height": "700px"},
                     className="graph"
                 )
-
             ],
-            className="stats-card"
+            className="stats-card",
+            id="map-container"
         )
     ],
     id="map-flex",
-    className="flex-container",
-    style={"minHeight": "700px"}
+    className="flex-container"
 )
 
 
